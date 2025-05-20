@@ -2,13 +2,12 @@ package ru.cs.vsu.course1.g22.merkulov_mikhail.task4;
 
 import java.util.Random;
 
-import static ru.cs.vsu.course1.g22.merkulov_mikhail.task4.PanelVisualizer.frameSetup;
 // min - красный, i - зеленый, j - оранжевый, остальные - серый
 
 public class Task {
     public static void main(String[] args) {
         PanelVisualizer panel = new PanelVisualizer(getRandomData());
-        frameSetup(panel);
+        panel.setup();
     }
 
     private static int[] getRandomData() {

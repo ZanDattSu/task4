@@ -5,7 +5,7 @@ import java.awt.*;
 import java.util.List;
 
 public class PanelVisualizer extends JPanel {
-    public static final int TIMER_DELAY_MS = 200;
+    public static final int STEP_DELAY_MS = 300;
 
     private final List<SortState> states;
     private int currentIndex = 0;
@@ -14,10 +14,14 @@ public class PanelVisualizer extends JPanel {
     public PanelVisualizer(int[] array) {
         this.states = SelectionSorter.getSortStates(array);
         setPreferredSize(new Dimension(1080, 720));
-        timer = new Timer(TIMER_DELAY_MS, _ -> nextState());
+        timer = new Timer(STEP_DELAY_MS, _ -> nextState());
     }
 
-    private void nextState() {
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public void nextState() {
         if (currentIndex < states.size() - 1) {
             currentIndex++;
             repaint();
@@ -26,7 +30,7 @@ public class PanelVisualizer extends JPanel {
         }
     }
 
-    private void prevState() {
+    public void prevState() {
         if (currentIndex > 0) {
             currentIndex--;
             repaint();
@@ -94,46 +98,7 @@ public class PanelVisualizer extends JPanel {
         g.drawString(valueStr, strX, strY);
     }
 
-    public static void frameSetup(PanelVisualizer panel) {
-        JFrame frame = getJFrame(panel);
-
-        JPanel buttons = getButtonsPanel(panel);
-        frame.add(buttons, BorderLayout.SOUTH);
-
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-    }
-
-    private static JFrame getJFrame(PanelVisualizer panel) {
-        JFrame frame = new JFrame("Selection Sort Visualizer");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-        frame.add(panel, BorderLayout.CENTER);
-        return frame;
-    }
-
-    private static JPanel getButtonsPanel(PanelVisualizer panel) {
-        JPanel buttons = new JPanel();
-        JButton btnPrev = new JButton("Previous");
-        JButton btnNext = new JButton("Next");
-        JToggleButton btnPlay = new JToggleButton("Play");
-
-        btnPrev.addActionListener(_ -> panel.prevState());
-        btnNext.addActionListener(_ -> panel.nextState());
-        btnPlay.addItemListener(_ -> {
-            if (btnPlay.isSelected()) {
-                panel.timer.start();
-                btnPlay.setText("Pause");
-            } else {
-                panel.timer.stop();
-                btnPlay.setText("Play");
-            }
-        });
-
-        buttons.add(btnPrev);
-        buttons.add(btnPlay);
-        buttons.add(btnNext);
-        return buttons;
+    public void setup() {
+        JFrameSetupper.frameSetup(this);
     }
 }
